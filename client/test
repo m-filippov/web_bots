@@ -1,0 +1,925 @@
+# Change Log
+
+# NEXT
+
+# 1.4.2-31
+
+CHANGED:
+* Migrated to new UnityBase and UB packages to support Security User Groups
+  * **NOTE**: Cleaned up initialization data for OLD roles (buyer/requestor/supplyChain), new environments won't have
+    these roles!  Do not use them.  Instead, use new feature-scoped system roles and user groups.
+    To give an access level for a user, include the user into a security group, do not give any role to the user!
+
+FIXED:
+* NECTAIN-869: BDG: Tab: Localization mistake - RU EN
+* NECTAIN-361: PLN: Sourcing Planning: The chart doesn`t display after opening existing project (if two projects are opened)
+* NECTAIN-852: PLN: Needs Aggregation: Currency \ SKU Category fields must be locked if basic settings section is innactive
+* NECTAIN-834: CPC: PLN: Needs Analysis: Edit quantity popup doesn`t according to design
+* NECTAIN-868: PLN: Sourcing Planning: Move 'Planned procedure' separator above that RFI \ Auction attribute
+* NECTAIN-743: PLN: Needs Aggregation: Localization mistake - RU
+* NECTAIN-745: PLN: Approval step: Localization mistake - RU
+* NECTAIN-777:  PLN: Dashboard: Broken layout
+* NECTAIN-822: PLN: Demand: Incorrect validation message in the preview form 'Change the line' RU/EN
+* Budgeting icon
+
+# 1.4.2-30
+
+ADDED:
+* NECTAIN-839: PLN: Sourcing Planning: Planning step: Add the payment condition DDL
+
+CHANGED:
+* NECTAIN-823, NECTAIN-830: PLN: Aggregation step: Calculate sum with accounting SKU prices per Cost Center
+* MDM, BDG, PLN: Updated "budgetPPU" (price) attribute type: from "Currency" to "Float" to provide up to 6 digits after
+  decimal sign precision.
+* PLN: Added "budgetPPU" attribute to pln_ProjectQuantity (aggregated demand quantities for a sourcing project) to fix
+  the price.
+  * **NOTE**: For existing sourcing projects the attribute value would not be sane.  Attribute is filled with a new
+              logic, which was not there at the time the sourcing projects were created.
+              In order to fix that, either delete all the sourcing projects, OR run the following SQL script manually,
+              it will set the price to value in SKU dictionary:
+
+    ```sql
+    UPDATE pq
+       SET budgetPPU = si.budgetPPU
+      FROM pln_ProjectQuantity pq
+      JOIN mdm_SkuItem si ON si.ID = pq.skuID
+    ```
+* PLN: Start Analysis server action:
+  * Resolve price per price dimensions and store in `pln_ProjectQuantity.budgetPPU`
+
+# 1.4.2-29
+
+FIXED:
+* NECTAIN-847: PLN: Needs Analysis: Fixed wrong `delivery date` after start analysis
+* E-Budgeting: fixed roles
+
+# 1.4.2-28
+
+FIXED:
+* NECTAIN-855: PLN: Needs Aggregation: Wrong delivery dates when SKU has lead time
+
+# 1.4.2-27
+
+FIXED:
+* NECTAIN-847: PLN: Needs Analysis: Delivery Date changing after saving on Aggregation step
+
+# 1.4.2-26
+
+ADDED:
+* NECTAIN-829: CPC: BDG: Add SKU budget price management grid and form
+
+FIXED:
+* NECTAIN-645: PLN: Sourcing Planning Refactoring - Sourcing Planning - Project team section
+* NECTAIN-777: PLN: Dashboard: Broken layout
+* NECTAIN-607: PLN: Sourcing Planning Refactoring - Needs Aggregation - Combobox highlight and text align
+* NECTAIN-847: PLN: Needs Analysis: Delivery Date changing after saving on Aggregation step
+* NECTAIN-833: PLN: Sourcing Planning: 3rd step. Reload `People informed` after saving
+
+# 1.4.2-25
+
+FIXED:
+* NECTAIN-844: PLN: Sourcing planning: Impossible to set awarding day \ procedure
+
+# 1.4.2-24
+
+ADDED:
+* NECTAIN-721: MDM: Payment Terms: Modified Payment Terms dictionary
+* NECTAIN-824: ADM: Added fine-grained System Roles, please read NECTAIN-826 for details.
+* NECTAIN-824: ADM: Created User Groups as described in NECTAIN-827
+
+FIXED:
+* NECTAIN-810: PLN: Sourcing Planning: Displaying 'Invalid date' after initiate RFI \ Auction checkboxes in Firefox on a new sourcing project
+* NECTAIN-833: PLN: Sourcing Planning: Error 500 when user save project with added values in 'people informed' field
+* NECTAIN-712: PLN: Add description field to Sourcing Project: To Sourcing plan grid on CPC.qa
+* NECTAIN-838: PLN: Sourcing planning grid: Impossible to remove any sourcing project
+
+# 1.4.2-23
+
+CHANGED:
+* Updated UnityBase packages to the latest version (note, need to update UnityBase server)
+* E-Planning: Sourcing Project: fixed position of buttons for reopening aggregation and analysis step (placed to footer)
+* E-Planning: Attempt to create a Sourcing Project under user account, not associated with any staff unit now result
+  in an informative error message, rather than allowing to go all the way until user get error message after doing work
+  and not being able to save sourcing project.
+* E-Planning: fixed date format in demand grid (NECTAIN-818)
+* Refactoring: renamed "sourcing-project" front-end component to "pln-project"
+* Refactoring: reorganized navigation - split solid file into a file per model
+* CPC: REQ: Preparation: form redesign (NECTAIN-806)
+
+# 1.4.2-22
+
+ADDED:
+* E-Planning: Sourcing Project: Support filtration by dimensions ([NECTAIN-757](https://dev.intecracy.com/jira/browse/NECTAIN-757), [NECTAIN-778](https://dev.intecracy.com/jira/browse/NECTAIN-778))
+* E-Planning: Sourcing Project: Edit Quantities by dimensions ([NECTAIN-812](https://dev.intecracy.com/jira/browse/NECTAIN-812))
+
+FIXED:
+* NECTAIN-803: RFI: The toggle is displayed above error UI message in the questionnaire section
+* NECTAIN-804: RFI: Warning when user add a new Strategy Planning
+
+# 1.4.2-21
+
+FIXED:
+* refactor(errors): change default ub errors to custom
+* NECTAIN-655 "Feature/ pr fix"
+
+# 1.4.2-20
+
+FIXED:
+* NECTAIN-692: PLN: Needs Analysis: Edition quantity \ delivery dates should be locked after initiation to the next step
+
+# 1.4.2-19
+
+FIXED:
+* NECTAIN-797: PLN: Need Aggregations: Wrong location of the column 'Lead Time'
+* NECTAIN-800: PLN: Aggregation / Analysis steps: Excel export: Not translated columns name
+* NECTAIN-801: PLN: Needs Aggregation / Analysis: Localize the names of columns in the exported file
+
+# 1.4.2-18
+
+FIXED:
+* NECTAIN-790: PLN: Needs Aggregation: Incorrect aggregation of SKU levels (SKU items duplication)
+
+# 1.4.2-17
+
+FIXED:
+* Env variables in ubConfig.json
+
+# 1.4.2-16
+
+CHANGED:
+* Requisition sourcing coverage mode begin rework
+* PLN: logic build data for tree grid component replaced to module lookups
+* PLN: redesigned form footer on step aggr. and anali.
+
+FIXED:
+* NECTAIN-782: CPC: PLN: Needs Aggregation: Export aggregation \ analysis doesn\`t work. Now can dynamicly build columns
+
+# 1.4.2-15
+
+FIXED:
+* escape quotes in UbConfig.json
+
+# 1.4.2-14
+
+FIXED:
+* NECTAIN-786: CPC. PLN. Demand. Error when edit incorrect row
+
+# 1.4.2-13
+
+CHANGED:
+* NECTAIN-773: CPC: PLN: "Skip Approval" configuration option
+  * Now it is clear what to do with step "Approval" at the top of page, so it is not hidden
+
+# 1.4.2-11
+
+FIXED:
+* Added custom_model env variable to ub-scheduler service
+
+# 1.4.2-10
+
+FIXED:
+* Custom_model env variable
+
+# 1.4.2-9
+
+ADDED:
+* E-Planning - Dashboards
+* NECTAIN-708: CPC: PLN: Demand Upload Customization: Add 7 additionally fields to the demand template xsl (Technical Project number/Technical Project Name/ Cost Sheet Number/Cost Sheet Name/ Asset Number/Asset Name/Purchasing Level)
+* NECTAIN-773: CPC: PLN: "Skip Approval" configuration option
+  * !!! Not clear what to do with step "Approval" at the top of page, so it is not hidden
+* NECTAIN-774: CPC: PLN: Add configuration option "Nectain Network" enabled
+
+# 1.4.2-8
+
+ADDED:
+* Demand Item form (UB form opened from demand planning grid on double-click) now automatically pulls custom dimension
+  attributes and adds it to the form.
+* Added Planning Customization guidelines (models/pln/README.md)
+* CAEPCO customization model:
+  * !!! **Dev** configuration is temporarily uses the model as the default customization
+  * Entities: `pln_DemandItem`, `pln_Project`, `pln_ProjectQuantity`
+  * Navigation - added extra columns to Demand Planning and Sourcing Planning
+
+FIXED:
+* NECTAIN-728: PLN: Needs Analysis: Error during the transition between Analysis and Aggregation steps when two different projects are open on the same steps
+* NECTAIN-755: PLN: Sourcing Planning: Wrong behavior with risk items if two different projects are opened
+* NECTAIN-759: PLN: Needs Analysis: Checking \ Unchecking of SKU item should be locked after aggregation
+
+# 1.4.2-7
+
+ADDED:
+* E-Planning - added buttons "Publish" and "Unpublish" on execution step
+* MDM: Added Assets, Purchasing Levels, Cost Sheets and Tech Projects dictionaries.
+
+FIXED:
+* E-planing - 3d step - fixed server problem with missing on client `supplierID` after startPlanning
+* NECTAIN-727: PLN: Needs Analysis: Missing round off of values in the 'Planned Quantity' column on the 'Edit quantity' popup
+* E-Planning - 2nd step - disabled edit quantity and delivery date for project with subStatus more than 2nd step
+
+# 1.4.2-6
+
+ADDED:
+* NECTAIN-710: Add description field to Sourcing Project
+
+CHANGED:
+* NECTAIN-664: PLN: Sourcing Planning Refactoring - rewrite aggregation sku grid
+
+FIXED:
+* E-Planning - 3d step - extended validation rule for allowing update `customAwardDate`
+* E-Planning - 3d step - not changed `planned savings`, `rfi/auction checkbox`, `procedure` and `awarding date` on 3d step
+* NECTAIN-696: PLN: Needs Aggregation: Unchecked item should not displays on the exported xlsx file
+* NECTAIN-738: PLN: Needs Analysis: Hide 'delivery dates' edit attributes for unchecked SKU items
+* NECTAIN-334: PLN: Needs Analysis: Exclude decimal type in column 'Price'
+
+# 1.4.2-5
+
+# 1.4.2-4
+
+FIXED:
+* E-Planning - aggregation grid hot-fix
+
+# 1.4.2-3
+
+CHANGED:
+* E-Planning - aggregation grid refactoring
+
+FIXED:
+* E-Planning - 3d step - Fixed dates calculation on Rfi/Auction checkboxes change
+* E-Planning - risk management `share` module state. Changed module (and state) type to function from object
+
+# 1.4.2-2
+
+ADDED:
+* added ui services to vendor
+* `UI-KIT`: added icon-single prop to nc-button component
+* E-Planning - added attribute `plannedTndCmtID`, where saved "Tender Committee Defined by Rules", it will be used
+  in planning to control if tender committee field is editable or not.
+* E-Planning - Added `risk management` to 4th step
+* E-Planning - approval step - fixed page height from fixed to scrolled vertically on overflow
+* E-Planning - approval step - added "Approve" button ONLY IF the form opened from task manager,
+  implemented approval front-end and backend call to actually complete the task on button click with confirmation
+  dialog for user
+* E-Planning - added transition to "Execution" status after BPMN approval process complete successfully
+* E-Contract module
+
+CHANGED:
+* Updated UnityBase packages
+* E-Planning - disallowed deletion of sourcing projects in status not equal to "draft"
+* Requisition - budget calculation updated.
+* Requisition entities and rqs_UncoveredDemand.sql updated. ALARM!!! Need manual rqs_UncoveredDemand view re-creation
+  and permissions fix on servers
+
+FIXED:
+* E-Planning - Added readOnly mode to `risk management` control
+* E-Planning - Added `risk management` to 4th step
+* E-Planning - 3d step - Extract `risk management` state to separate vuex module for reuse component
+* E-Planning - added processes deletion on step reopen to cancel all approval tasks started before
+* E-Planning - planning step - replaced hardcoded (UAH) currency code for budget to actual currency code
+* E-Planning - planning step - planned saving - disallow to edit, when status is not draft
+* E-Planning - fixed save error, when project is `on_approval` status.
+* E-Planning - added missing "execution" status enumeration member (to fix status displaying in grid)
+* E-Planning - "back" to previous step buttons - made while - like in designs
+
+# 1.4.2-1
+
+FIXED:
+* E-Planning - 3d step - Risk management. Added sorting.
+
+# 1.4.2-0
+
+CHANGED:
+* Test data:
+  * Created `init-services.cmd` script to help developers to create local environment
+  * User `usr_010101` gets role `buyer` automatically during test data creation
+    * Made it easy in script to patch user-role initialization to help in future add roles to other users, if needed
+      during test data creation
+  * Suppliers script now insert address and email contacts, so that it would be displayed in suppliers section
+* Demand Coverage for Sourcing Plan:
+  * Upon request, returned coverage tracking logic back to account for ALL sourcing projects,
+    not just approved / in execution
+
+FIXED:
+* Added reloading `risks`, `invites`, `informed` collections on startPlanning click for fix client error on change this
+    step
+* Fixed saving `Planning` step. Reload `risks` collection after saving for refresh `isDirty`.
+* Series of small post-merge bugs in Sourcing Planning
+
+# 1.4.1
+
+FIXED:
+* WebSocket configuration (for accessing RabbitMQ from browser).
+
+# 1.4.0
+
+CHANGED:
+* Refactored E-Planning module (apply `Instance` pattern)
+
+# 1.3.0
+
+ADDED:
+* Added RabbitMQ services to QA deployment
+* `sourceable` attribute to `mdm_FinAccount` dictionary
+* RabbitMQ to docker compositions: `dev_*`, RabbitMQ test form and menu item in Administration desktop
+
+# 1.2.1-33
+
+ADDED:
+* [`popper`](https://github.com/RobinCK/vue-popper) component to vendor
+
+CHANGED:
+* updated `node-sass` package
+* removed highcharts from vendor
+* NECTAIN-600: Redesign Requisition Form
+
+FIXED:
+* fixed bug in Requisition items search
+
+# 1.2.1-32
+ADDED:
+* Requisition - added validations for title, description and items price per unit fields
+
+CHANGED:
+* eOrder was renamed to Order
+* Requisition - some refactoring
+
+FIXED:
+* NECTAIN-595: RFI: Error if save the form after add Suppliers
+* Requisition - fixed bug with items table, comment, interval calculation etc
+
+# 1.2.1-31
+
+# 1.2.1-30
+
+ADDED:
+* NECTAIN-576: UI-KIT: added nc-checkbox blue style
+* NECTAIN-584: UI-KIT: rewrite error dialog
+
+# 1.2.1-29
+
+ADDED:
+* Added Validation in popup "Add supplier"
+* Backend for RFI Strategy Planning Graph
+* eOrder Vue Form
+
+CHANGED:
+* Requisition partial refactoring
+
+# 1.2.1-28
+
+# 1.2.1-27
+
+FIXED:
+* Export to excel of Sourcing Projects and all other grids with "badge"-styled columns
+* NECTAIN-571: RFI: Basic settings(header) isn't absent in the form
+
+# 1.2.1-26
+
+ADDED:
+* An attempt to see Strategy Planning Graph
+
+CHANGED:
+* Section "Approval status" isn't collapsed
+* Requisition refactoring started (not completed)
+
+FIXED:
+* NECTAIN-557: RFI: Impossible to save changes with the same Title
+* NECTAIN-553: RFI: Error if save RFI with Title more than 129 characters
+* NECTAIN-555: RFI: Invalid translate ru/uk
+
+# 1.2.1-25
+
+# 1.2.1-24
+
+ADDED:
+* RFP form
+
+# 1.2.1-23
+
+CHANGED:
+* Entity ORD level security was changed for buyer and supplyManager
+
+
+# 1.2.1-22
+
+CHANGED:
+* Change the position of the E-Order menu
+
+# 1.2.1-21
+
+# 1.2.1-20
+
+ADDED:
+* icons styles [docs](https://gitlab.intecracy.com/nectain/ub-app/blob/53959391a33138e9917678e34e53875477d403c0/components/vue-components/src/plugins/nectain-vue-ui-kit/README.md#icons)
+* Requisition. Added budget calculation, graph
+
+CHANGED:
+* `ui-kit`: `nc-button` props [docs](https://gitlab.intecracy.com/nectain/ub-app/blob/53959391a33138e9917678e34e53875477d403c0/components/vue-components/src/plugins/nectain-vue-ui-kit/README.md#button)
+* Requisition. New search logic
+
+FIXED:
+* NECTAIN-533: RFI: Invalid translate ru/uk
+* NECTAIN-517: RFI: Error if keep RFI with the same name
+* NECTAIN-543: RFI: 'Approval Status' Section isn't displayed by default
+
+# 1.2.1-19
+
+CHANGED:
+* `ui-kit`: `nc-breadcrumb` component to  `nc-breadcrumbs` and change component props. Look ui-kit docs
+* NECTAIN-529: RFI Refactoring z-index styles (all z-indexes in one file \_z-index.scss)
+
+ADDED:
+* `ui-kit`: `nc-copy-data-dialog` component
+* Added reusable-section: Strategy Planning
+
+FIXED:
+* NECTAIN-485: RFI: Files are saved twice in a Drag and Drop file
+* NECTAIN-351: RFI: Show errorDialog when 'drop' files size more than 5 mb, show errorDialog when 'drop' file is already exist
+* NECTAIN-484: RFI: Custom UB UI Design
+* NECTAIN-518: RFI: Form is not saved with empty mandatory fields by use space
+
+# 1.2.1-18
+
+FIXED:
+* NECTAIN-477: RFI: Questionnaire mandatory fields are not marked a red square
+* NECTAIN-481: RFI: Remove validation message 'Please fill this field' below Reference type
+* NECTAIN-482: RFI: Impossible to save RFI Form after delete supplier
+* NECTAIN-483: RFI: Text out of line in the pop up window
+
+# 1.2.1-17
+
+# 1.2.1-16
+
+CHANGED:
+* Purchase requisition update. Item search rework, budget counting logic, budget graphic (in process)
+* Requisition models update
+
+ADDED:
+* rqs_UncoveredDemand view with entities
+
+# 1.2.1-15
+
+# 1.2.1-14
+
+# 1.2.1-13
+
+FIXED:
+ * RFI: rating chart hotfix
+
+# 1.2.1-12
+
+ADDED:
+* `ui-kit`: `nc-file` component [docs](https://gitlab.intecracy.com/nectain/ub-app/blob/fb894feaaf9bb33cd087773050e8381da8852b40/components/vue-components/src/plugins/nectain-vue-ui-kit/README.md#file-upload)
+
+CHANGED:
+* Requisition improvements
+* Refactoring of eRequisition and eCatalog modules (renamed fields in tables, etc., as well as corresponding changes in the code)
+
+# 1.2.1-11
+
+CHANGED:
+* Common UB notification dialogs
+
+# 1.2.1-10
+
+FIXED:
+* PLANNING: Removed old "random" procedure selection from "Planning" tab (crashed on QA)
+
+# 1.2.1-9
+
+FIXED:
+* Configuration problem
+
+# 1.2.1-8
+
+CHANGED:
+* Purchase Requisition improvements
+
+ADDED:
+* eContract module structure, added 4 tables (cnt_Catalogue, cnt_CatalogueItem, cnt_Contract, cnt_ContractItem)
+
+# 1.2.1-7
+
+FIXED:
+* `Needs Aggregation/Analysis` steps - calculation total budgets (precision problem 0.1\*0.2)
+* `Needs Aggregation/Analysis` steps - wrong expanding nodes in grid when expand/collapse nodes
+* PLANNING: After loading one Sourcing Project, the window for creating another was not "clean".
+* PLANNING: "Planning" tab loading - fixed set of bug - crashes.
+* PLANNING: "Planning" tab - changed tender committee select control to allow only one selection, not multiple.
+* LAYOUT->RELOGIN: show error message, added autofocus to password
+
+CHANGED:
+* PLANNING: Backend - added call for tender committee assignment and for procedure selection.
+* UI-KIT: changed confirm props in component
+* CSS-ROOT: changed color sass variables names
+
+# 1.2.1-6
+
+CHANGED:
+* ORG: added assignment type "member", added staff unit types: "employee", "member"
+* Test Data: added a script for creation of tender committees
+* Migrated to new bpm packages
+
+# 1.2.1-5
+
+CHANGED:
+* Entities and tables `bdg_*` renamed to `pln_*`, changed all related code.
+
+# 1.2.1-4
+
+FIXED:
+* Fix styles
+* Fix tab close logic
+
+# 1.2.1-3
+
+CHANGED:
+* Fixed displaying unchecked sku items on Needs Analysis
+* Updated `ub-migrate`, now `iconCls` for navigation shortcuts shall be set correctly on migration.
+
+FIXED:
+* Validation on delete sourcing project
+
+# 1.2.1-1
+
+CHANGED:
+* Font changed to `Open Sans`
+
+# 1.2.1-0
+
+CHANGED:
+* **BREAKING CHANGE**: Planning and Sourcing entities use Staff Units now for assignment (Responsible, Informed, etc)
+  instead of Employee entity.
+* moved analysis module actions to analysis.js (module). Removed actions.js (module)
+* `ui-kit`: `collapse-section` - optimized block folding, added `is-collapsed-on-init` attr
+* `ui-kit`: `nc-status` - changed prop `type` to prop `color`
+* allow access to `Import from Excel` to `supplyManager` only
+
+# 1.2.0
+
+CHANGED:
+* allow planned the same demands until used it project in subStatus previous `Approval`
+* extended PLN_PROJECT_DETAILED_STATUS enum for `Sourcing Project` corresponding last steps
+* removed sorting by check/uncheck SkuItem on Needs Aggregation/Analysis steps
+* updated to the latest version of BPM packages (3.3.0): migrated to all new versions of used modeling components:
+  bpmn-js, cmmn-js, dmn-js, etc.  Fixed some problems with DMN editor, with modeler in generate.  For details,
+  see: https://gitlab.intecracy.com/unitybase/bpm/blob/master/CHANGELOG.md
+
+FIXED:
+* fixed loading data on in edit quantity popup for SKU with more than one CostCenter
+* fixed reset quantities from edit popup
+
+# 1.2.0-43
+
+ADDED:
+* Update demand functionality
+
+CHANGED:
+* Needs Aggregation/Analysis grid nodes not collapsed after changes
+
+FIXED:
+* A few problems with DMN (updated to latest bpm packages where the problems fixed).
+
+# 1.2.0-41
+
+* Camunda
+* requision
+* relogin disabled input
+* rfq: code clean
+
+# 1.2.0-40
+
+CHANGED:
+* added exception handling on client `startAnalysis` and `startPlanning`
+* fixed problem with comparing `mi_modifyDate` in checkOptimisticLock
+* `UI-kit`:
+  - **BREAKING** `nc-radio` prop items changed from `items:[{value:1, label: 'aaa'}]` to `items:[{id:1, label: 'aaa'}]`
+  - removed `entity-autocomplete`
+  - `nc-select` redesigned
+  - `nc-select` added async data loading
+  - `nc-select` added autocomplete
+  - `nc-select` added infinity scroll
+
+# 1.2.0-38
+
+CHANGED:
+* fixed wrong `assert` usage on startAnalysis
+
+# 1.2.0-37
+
+CHANGED:
+* `pln_Project`:
+  * Added attribute `supplyChangeMangerID`, added entity `pln_ProjectRisk` for keeping risks
+  * Removed status `on_review`, now review and approval are part of the same process
+  * Added attribute `plannedSavings`
+
+# 1.2.0-35
+
+ADDED:
+* UI kit components: `radio`, `select`, `breadcrumb`, `collapse-section`, `form-item`, `checkbox`, `textarea`, `multiselect`
+* `iconfont-webpack-plugin` [docs](https://www.npmjs.com/package/iconfont-webpack-plugin)
+* `camunda` and `bpm-sync` services, configuration for bpm integration
+
+FIXED:
+* `input` in ui kit
+* Opening wrong step for Project in `planning` subStatus
+
+CHANGED:
+* Added reset changes functionality on Needs Analysis step
+
+
+# 1.2.0-34
+
+FIXED:
+* Exception when clear deliveryDate
+* Project quantity edit
+* Loading cost centers and subcategories from previus Sourcing Project on create
+
+# 1.2.0-33
+
+CHANGED:
+* Added saving `plannedProcedureID`, `plannedAwardDate` required for `Start Planning` step
+* Removed precision on columns showed money (except Price)
+* `Needs Aggregation` - added cascade loading data to filters
+* `Needs Aggregation` - removed complex logic for cascade disabling controls on
+* Updated `riophae/vue-treeselect` to last version after encountered a [problem](https://github.com/riophae/vue-treeselect/issues/122) in SubCategories selectbox.
+
+ADDED:
+* confirm dialog. Now available in all vue-instances as function `this.$confirm(options)`, `return Promise`
+
+# 1.2.0-32
+
+* fixed error in localization file crached login
+
+# 1.2.0-31
+
+ADDED:
+* `bdg_UncoveredDemand` entity for `bdg_UncoveredDemand` SQL view
+* animation in tabbar
+
+CHANGED:
+* integrate `RFI` form with `UB`
+* Add `Created` column to Demand Planning grid
+
+# 1.2.0-30
+
+* fixed money value formatting
+
+CHANGED:
+* Localization for columns in `Demand Grid`
+
+# 1.2.0-29
+
+* ADDED: `RFI` form
+
+CHANGED:
+* reworked edit quantities - Save, Reset and Cancel operation
+* `Needs Analysis` - budget calculation on check/uncheck SkuItems
+
+# 1.2.0-28
+
+ADDED: `rqs` model
+
+# 1.2.0-27
+
+FIXED:
+* `Needs Analysis` - fixed budget coverage calculation on open
+* `Needs Aggregation` - check/uncheck `Total budget` calculation. Rework budget coverage calculation
+* `Needs Aggregation` - set USD currency as default
+* Order of menu items
+* Fixed a bug with building `caption` attribute for planning (for any entity with not multilang caption)
+
+# 1.2.0-24
+
+CHANGED:
+* BACKEND: added handling of cross-cutting concerns - caption and documentNumber as entity mixins configuration,
+  applied it to pln_Project and src_RFI entities
+* Renamed `src_RFI_attachment` to `src_RFIAttachment`, `src_RFI_response` to `src_RFIResponse`,
+ `src_RFI_invite` to `src_RFIInvite`
+
+# 1.2.0-23
+
+FIXED:
+* `src_RFI_ppt`: fixed index name
+
+# 1.2.0-22
+
+ADDED:
+* `src_RFI` and related entities
+* Navigation menu item E-Sourcing / RFI
+* RFI grid
+
+CHANGED:
+* Migrated to newest `ubjs` packages
+* Added desc sorting by Total budget
+
+# 1.2.0-21
+
+CHANGED:
+* Fixed delivery date caption for disabled item - `Needs analysis`
+
+# 1.2.0-20
+
+FIXED:
+* MDM: temp fix of "SKU Categories" column in external organizations dictionary
+  * Will need to do a better fix later, can also need to do fix in other places where in grid displayed
+    list of SKU Categories
+
+# 1.2.0-19
+
+ADDED:
+* MDM: override for `cdn_organization` entity with `rating` and `skuGroupID` attributes - just for Suppliers support
+  * The entity form also customized to accustom the new attributes: additional tab added
+  * The new tab is active for "supplier" organization type (need to have it in dictionary of organization types)
+  * The customized form has improved tab caption (using FormCaptionPlugin)
+* MDM: Added a menu item for external organization in "Data Management"
+
+FIXED:
+* MDM: Bug with saving Tender Procedure
+* UI - Navigation bar: sorted items by `displayOrder` attribute
+* UI - Navigation bar: Allowed top-level shortcuts
+* UI - Tabs: fixed absent tabs
+  * ! The fix is a temp solution, before refactoring of code take place
+* UI - Tabs: fixed bug: when do "save and close" - the tab was not removed
+
+# 1.2.0-17
+
+CHANGED:
+* Used disabled select controls instead of labels on Needs Analysis step
+* Fixed wrong saving exclulded Sku Item from Needs Aggregation
+* `Needs analysis` - fixed calculation delivery date after saving
+* removed ProximaNova font
+* redesign relogin window
+
+# 1.2.0-16
+
+FIXED
+* Fixed quantity calculation and delivery date saving
+
+# 1.2.0-15
+
+CHANGED:
+* Updated ubConfig.json in Docker
+
+# 1.2.0-14
+
+ADDED:
+* VUE - `src/css/rootStyles.scss` for root styles
+* custom search to new sidebar
+
+CHANGED:
+* fixed exception on loading delivery date
+* Sidebar
+
+# 1.2.0-13
+
+CHANGED:
+* `Needs analysis` - added saving delivery date
+* `Needs analysis` - implement editing quantities with next recalculation and update in Edit window and Analysis grid
+* `Needs analysis` - added loading delivery date and summarize quantities by cost center on edit quantity dialog
+
+# 1.2.0-12
+
+ADDED:
+* `sourcing-plannin form` (not integrated with UB)
+* added moment.js lib to vendor. Now can use `this.$moment()` in Vue instance
+
+CHANGED:
+* fixed start analysis after saving
+* `Neads Analysis`
+  * handle unselected row and some layout issues
+  * added button redirected to Sourcing planning
+  * fixed Sourcing Planning title
+
+
+# 1.2.0-11
+
+* Added `Needs analysis` grid
+
+# 1.2.0-10
+
+* Output application version on login page (right under "powered by" label, bottom, small font)
+
+# 1.2.0-5
+
+FIXED:
+* Problem with saving organization.
+
+# 1.2.0
+
+CHANGED:
+* BPM integration - added shortcuts, dictionaries and other code needed to function BPM
+* Renamed `mdm_Organization` to `org_organization` - use UB new feature to override entities instead of "union" them
+
+# 1.1.0
+
+ADDED:
+* Models `dom`, `bpm`, `bpm-modeler`
+* Provided with Content Security Policy headers all application pages to prevent attack surface, according to best
+  security practices.
+* Vue prototype added `$UB`
+
+CHANGED:
+* fixed `Needs Aggregation` update functionality
+* removed pln_Project_Create custom from
+* Login page:
+  * Added the strictest possible CSP, rewrote code to not use script eval
+* `Needs Aggregation` - added saving sku items and loading it after open Sourcing Plan
+* Reworked progress bar values according to selected Sku items. Clear grid and progressbar if clear filters
+* fixed money formatting and calculation progress bar in case when grid have 1 root element
+* Added support v-model on `tree-grid.vue`
+* `Needs Aggregation` - added budget coverage captions
+* `Needs Aggregation` - fixed problem with displaying long value in UOM column
+* Migrated to UnityBase 5.1 and newest ubjs packages
+* DB structure changes:
+  * `pln_Project` - added `many` column `subCategoryID` - instead of explicit entity `pln_Project_cat`, and
+    pln_Project_cat.meta was removed.
+  * Added `pln_ProjectSku`, where SKU price is locked
+  * `pln_Project` horizon fields changed from `Date` type to `Int` (months since 2000-Jan) - just like done for budget
+    items, added `horizonBeginYear`, `horizonBeginMonth`, `horizonEndYear`, `horizonEndMonth` read only attributes
+  * `pln_ProjectItemInterval` renamed to `pln_ProjectQuantity`, added quantities for contract and for inventory
+  * `pln_Project` - added forecast and planned dates columns
+  * `pln_Project` - added sub status to track aggregation/analysis/planning stage of the "draft" status
+* Added badge to Sourcing Project status in the grid
+* Budget import redesign
+
+FIXED:
+* Login page
+  * Fallback not to `en` but to whatever default language is (will depend on environment and UB configuration)
+  * Fixed a bug, which led to change login page language not from the first time: updated `@unitybase/ub-pub` and used LDS_KEYS
+    constants as keys of local storage
+
+# 1.0.2
+
+ADDED:
+* UB auto form for creation sourcing project
+* validation on create sourcing project form
+* header to tree-grid on Sourcing Project form
+* VUE.budgetImport: validation on row editing
+* VUE.budgetImport: autocomplete dictionaries on row editing
+* Loading SKU categories / SKU items with quantities and price into
+
+CHANGED:
+* aligned headers and data in treegrid (Needs Aggregation component)
+* renamed `Sourcing Project` component to `Needs Aggregation`
+* loading data to treegrid by filled dropdowns (not clicking on Save button)
+* !!! BREAKING !!! Removed `pln_ProjectItem` entity entirely.  Now `pln_ProjectItemInterval` contains reference
+  `itemID` to `pln_Project` - directly.  It also contains `costCenterID`, so that quantities are broke down not only
+  by intervals, but by cost centers.
+* Renamed `departmentID` "many" attribute in `pln_Project` to `costCenterID` and it now may refer `org_unit`, not just
+  `org_department` (shall be enforced to departments and organizations only though).
+* Cached `mdm_SkuItem` and `mdm_SkuCategory` dictionaries
+
+# 1.0.1
+
+CHANGED:
+* !!! BREAKING !!! Entities `pln_ProjectItemInterval` and `bdg_BudgetItemInterval` both have column `interval`,
+  its type change from `Date` to `Int` with meaning "number of months since 2000 January", so that `0` means
+   2000 January, "1" - 2000 February, etc.  If for some reason you need to go before 2000 year, use negative numbers,
+   "-1" would be 1999 December.
+* `mdm_Uom` remove unique constraint from `shortName` attribute.
+
+# 1.0.0-4
+
+ADDED:
+* Custom form for Uom, Cost Group and Fin Accounts
+
+CHANGED:
+* For MDM custom forms (SKU category, SKU item, Procedure) added more intellectual form title - it depends on
+  code and name.
+* Made `mdm_Uom`, `mdm_CostGroup`, `mdm_FinAccount` and `mdm_Procedure` cached at client, to speedup UI.
+
+# 1.0.0-3
+
+ADDED:
+* Test data creation scripts for ORG dictionary, SKU dictionaries, UOM
+
+CHANGED:
+* Migrated to the new version of UB packages
+* SKU Category and SKU Item forms, Procedure form - disabled exponential inputs for all numeric fields
+* `mdm_Procedure`, `mdm_Uom`, `mdm_Organization`, `mdm_CostGroup`, `mdm_FinAccount` to have `caption` attribute
+* `mdm_CostGroup` to have `parentID`, allowing to create hierarchical dictionaries
+
+FIXED:
+* A bug in `mdm_Procedure` - when duration was not changed, but only name, validation did not allow to save record
+
+# 1.0.0-2
+
+CHANGED:
+* `mdm_SkuItem` entity - changed criticality to High/Medium/Low enumeration from integer, according to changed in
+  FRS-MDM-01 spec
+
+# 1.0.0-1
+
+FIXED:
+* Migrated to the most fresh UB version, where fixed bugs impacted on Org dictionaries and SKU dictionaries
+
+ADDED:
+* Custom SKU Category form
+* SKU Items and SKU dictionaries have "caption" attribute now, which is built by pattern "<code> - <name>"
+* SKU Category has "tree" mixin now, which would make it possible to build faster working SKU Category tree selection
+  control
+
+# 1.0.0-0
+
+ADDED:
+* Initial version
